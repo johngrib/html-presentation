@@ -20,6 +20,7 @@
             height: 100vh; /* 브라우저 창의 높이에 맞춤 */
             width: 100vw; /* 브라우저 창의 너비에 맞춤 */
             position: relative;
+            flex-direction: column;
         }
         .slide {
             text-align: center;
@@ -60,6 +61,28 @@
             font-size: 2.5rem;
             font-weight: 600;
             text-align: left;
+        }
+
+        /* 작은 디바이스를 위한 반응형 스타일 */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 4.5rem;
+            }
+            h2 {
+                font-size: 3rem;
+            }
+            p, li {
+                font-size: 1.5rem;
+            }
+            li {
+                margin: 1.5rem;
+            }
+            ul ul li {
+                font-size: 1.25rem;
+            }
+            .page-number {
+                font-size: 1rem;
+            }
         }
     </style>
 </head>
