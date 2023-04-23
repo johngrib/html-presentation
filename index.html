@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>샘플 프리젠테이션</title>
+    <style>
+        /* 폰트 출처: https://cactus.tistory.com/306 */
+        @font-face {
+            font-family: 'Pretendard Variable';
+            font-weight: 45 920;
+            font-style: normal;
+            font-display: swap;
+            src: local('Pretendard Variable'), url('./PretendardVariable.woff2') format('woff2-variations');
+        }
+        .presentation {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh; /* 브라우저 창의 높이에 맞춤 */
+            width: 100vw; /* 브라우저 창의 너비에 맞춤 */
+            position: relative;
+        }
+        .slide {
+            text-align: center;
+        }
+        .page-number {
+            position: absolute;
+            bottom: 50px;
+            right: 100px;
+            font-size: 1.5rem;
+        }
+        body {
+            font-family: 'Pretendard Variable', sans-serif;
+            background-color: #f0f0f0;
+        }
+        h1 {
+            font-size: 9rem;
+            margin-bottom: 0;
+        }
+        h2 {
+            font-size: 6rem;
+            margin-bottom: 0;
+        }
+        p, li {
+            font-size: 3rem;
+            font-weight: 700;
+            color: gray;
+        }
+        li {
+            margin: 3rem;
+        }
+        img {
+            max-width: 600px;
+            max-height: 700px;
+        }
+        ul ul li {
+            font-size: 2.5rem;
+            font-weight: 600;
+            text-align: left;
+        }
+    </style>
+</head>
+<body id="body">
+    <div class="presentation">
+        <div class="slide">
+            <h1>샘플 프리젠테이션</h1>
+            <p>2023년 4월 23일</p>
+            <p>JohnGrib</p>
+        </div>
+    </div>
+    <div class="presentation">
+        <div class="slide">
+            <h2>스크롤 방법</h2>
+            <ul>
+                <li>마우스 클릭으로 다음 페이지 스크롤 가능</li>
+                <li>] 키를 누르면 다음 페이지</li>
+                <li>[ 키를 누르면 이전 페이지</li>
+                <li>마지막 페이지에서 다음 페이지로 가면 첫 페이지로 점프</li>
+            </ul>
+            <div class="page-number">$page-number</div>
+        </div>
+    </div>
+    <div class="presentation">
+        <div class="slide">
+            <h2>이미지 삽입</h2>
+            <ul>
+                <li>이미지 삽입은 그냥 img 태그로!</li>
+            </ul>
+            <img src="sunset-1373171_1280.jpg" alt="sunset">
+            <div>이미지 출처: <a href="https://pixabay.com/ko/photos/일몰-나무-물-실루엣-1373171/">pixabay.com 무료 이미지</a></div>
+            <div class="page-number">$page-number</div>
+        </div>
+    </div>
+    <div class="presentation">
+        <div class="slide">
+            <h2>페이지 번호 표시</h2>
+            <ul>
+                <li>페이지 번호는 page-number css class를 지정한 곳에 입력됩니다</li>
+            </ul>
+            <div class="page-number">$page-number</div>
+        </div>
+    </div>
+    <div class="presentation">
+        <div class="slide">
+            <h2>감사합니다!</h2>
+            <div class="page-number">$page-number</div>
+        </div>
+    </div>
+
+</body>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const pageNumberElements = document.querySelectorAll(".page-number");
+        const totalPages = pageNumberElements.length;
+
+        pageNumberElements.forEach((element, index) => {
+            element.textContent = `${index + 1} / ${totalPages}`;
+        });
+    });
+
+    let currentPage = 0;
+
+    function scrollToNextPage() {
+        const pages = document.querySelectorAll(".presentation");
+        if (currentPage < pages.length - 1) {
+            currentPage++;
+        } else {
+            currentPage = 0;
+        }
+        pages[currentPage].scrollIntoView({ behavior: "smooth" });
+    }
+
+    function scrollToPreviousPage() {
+        const pages = document.querySelectorAll(".presentation");
+        if (currentPage > 0) {
+            currentPage--;
+            pages[currentPage].scrollIntoView({ behavior: "smooth" });
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        // 페이지 번호 업데이트
+        const pageNumberElements = document.querySelectorAll(".page-number");
+        const totalPages = pageNumberElements.length;
+
+        pageNumberElements.forEach((element, index) => {
+            element.textContent = `${index + 1}/${totalPages}`;
+        });
+
+        // 클릭 이벤트 리스너
+        document.body.addEventListener("click", scrollToNextPage);
+
+        // 키보드 이벤트 리스너
+        document.addEventListener("keydown", function (event) {
+            if (event.key === "]") {
+                scrollToNextPage();
+            } else if (event.key === "[") {
+                scrollToPreviousPage();
+            }
+        });
+    });
+
+    function getClosestPage() {
+        const pages = document.querySelectorAll(".presentation");
+        const scrollPosition = window.scrollY || document.documentElement.scrollTop;
+        let closestPageIndex = 0;
+        let minDistance = Number.MAX_VALUE;
+
+        pages.forEach((page, index) => {
+            const distance = Math.abs(page.offsetTop - scrollPosition);
+            if (distance < minDistance) {
+                minDistance = distance;
+                closestPageIndex = index;
+            }
+        });
+
+        return closestPageIndex;
+    }
+
+    function updateCurrentPageOnScroll() {
+        currentPage = getClosestPage();
+    }
+
+    // 스크롤 이벤트 리스너 추가
+    window.addEventListener("scroll", updateCurrentPageOnScroll);
+</script>
+</html>
+
